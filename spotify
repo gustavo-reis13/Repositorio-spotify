@@ -1,0 +1,256 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.black, // Fundo preto
+        body: Column(
+          children: [
+            // Conteúdo principal rolável
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(8.0),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Boa noite',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.notifications,
+                                  color: Colors.white),
+                              onPressed: () {
+                                // Ação do ícone de notificações
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.history,
+                                  color: Colors.white), // Histórico
+                              onPressed: () {
+                                // Ação do histórico
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.settings,
+                                  color: Colors.white), // Configurações
+                              onPressed: () {
+                                // Ação das configurações
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Text(
+                    'Tocados recentemente',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: playlistCard(
+                                'Uma Vez',
+                                'Fhop',
+                                'https://akamai.sscdn.co/uploadfile/letras/fotos/6/b/3/b/6b3b21c0aef2c64effaa345f169804d2.jpg',
+                              ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Expanded(
+                              child: playlistCard(
+                                'Moises',
+                                'Fernandinho',
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6pNyPI_okPrX48XHeYIK6aDeU7p85K83fJg&s',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: playlistCard(
+                                'Escape',
+                                'Renascer Praise',
+                                'https://akamai.sscdn.co/uploadfile/letras/albuns/c/1/6/7/2085041704982040.jpg',
+                              ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Expanded(
+                              child: playlistCard(
+                                'Algo Novo',
+                                'Kemuel',
+                                'https://akamai.sscdn.co/letras/360x360/albuns/9/e/b/2/2085051704982055.jpg',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Últimos Álbuns',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 150,
+                    width: double.infinity,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        albumCard('Renascer Praise',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTniOfz8o9lrDFRJxKWhaLbttvYULFKh5aiYQ&s'),
+                        albumCard('Diante do Trono',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxNUuBH_G4uOhQ1LCNm54Paz36dOEXDUYFxQ&s'),
+                        albumCard('Voz da Verdade',
+                            'https://i.scdn.co/image/ab67616d0000b2732646cc1befd6e146b825b4de'),
+                        albumCard('Anderson Freire',
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAxBhTi5Erq72SqqP5wR3NWDoanKzgC90iEA&s'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Mini Player fixo na parte inferior
+            miniPlayer('Fhop - Tu és Águas Purificadoras'),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.black, // Fundo preto
+          selectedItemColor: Colors.green, // Verde Spotify
+          unselectedItemColor: Colors.grey,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Início'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.library_music), label: 'Biblioteca'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget playlistCard(String title, String subtitle, String imageUrl) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[850],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: ListTile(
+        leading: albumCardSimplificado(imageUrl),
+        title: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          subtitle,
+          style: const TextStyle(color: Colors.grey),
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.favorite_border, color: Colors.white),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+
+  Widget albumCardSimplificado(String imageUrl) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget albumCard(String title, String imageUrl) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              image: DecorationImage(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(color: Colors.white),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget miniPlayer(String title) {
+    return Container(
+      color: Colors.grey[900],
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        leading: IconButton(
+          icon: const Icon(Icons.play_arrow, color: Colors.white),
+          onPressed: () {},
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.favorite_border, color: Colors.white),
+          onPressed: () {},
+        ),
+      ),
+    );
+  }
+}
